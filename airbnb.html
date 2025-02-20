@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Picker - Check Availability</title>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #e04e52;
+        }
+        .response {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Select Your Dates</h2>
+        <input type="text" id="datePicker" placeholder="Select your dates">
+        <button onclick="checkAvailability()">Check Availability</button>
+        <p class="response" id="responseText"></p>
+    </div>
+    
+    <script>
+        flatpickr("#datePicker", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+        });
+
+        function checkAvailability() {
+            const dateInput = document.getElementById("datePicker").value;
+            if (!dateInput.includes(" to ")) {
+                document.getElementById("responseText").innerText = "Please select both start and end dates.";
+                return;
+            }
+            
+            const dates = dateInput.split(" to ");
+            const startDate = dates[0];
+            const endDate = dates[1];
+            
+            fetch("https://farrant-drive-a1f02247ac83.herokuapp.com/api/check-availability", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ startDate, endDate })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("responseText").innerText = data.message || "Availability checked successfully.";
+            })
+            .catch(error => {
+                document.getElementById("responseText").innerText = "Error checking availability. Please try again later.";
+            });
+        }
+    </script>
+</body>
+</html>
