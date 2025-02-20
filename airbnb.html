@@ -82,7 +82,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("responseText").innerText = data.message || "Availability checked successfully.";
+                if (data.available) {
+                    document.getElementById("responseText").innerText = `Available! Total Price: $${data.totalPrice}`;
+                } else {
+                    document.getElementById("responseText").innerText = "Not available for the selected dates.";
+                }
             })
             .catch(error => {
                 document.getElementById("responseText").innerText = "Error checking availability. Please try again later.";
