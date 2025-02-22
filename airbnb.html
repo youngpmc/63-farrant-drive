@@ -9,25 +9,45 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f7f7f7;
         }
         .container {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
+        }
+        .date-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .date-field {
+            flex: 1;
+            min-width: 0;
         }
         input {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+            font-size: 14px;
         }
         button {
             background-color: #ff5a5f;
@@ -37,6 +57,8 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #e04e52;
@@ -45,33 +67,83 @@
             margin-top: 10px;
             font-weight: bold;
         }
+        @media (max-width: 400px) {
+            .date-field {
+                flex: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Select Your Dates</h2>
-        <input type="text" id="datePicker" placeholder="Select your dates">
+        <h2>Check Availability</h2>
+        <div class="date-container">
+            <div class="date-field">
+                <label for="checkIn">Check In</label>
+                <input type="text" id="checkIn" placeholder="Select check-in date">
+            </div>
+            <div class="date-field">
+                <label for="checkOut">Check Out</label>
+                <input type="text" id="checkOut" placeholder="Select check-out date">
+            </div>
+        </div>
         <button onclick="checkAvailability()">Check Availability</button>
         <p class="response" id="responseText"></p>
     </div>
     
     <script>
-        flatpickr("#datePicker", {
+        const checkInInput = document.getElementById("checkIn");
+        const checkOutInput = document.getElementById("checkOut");
+
+        // Single Flatpickr instance managing both fields
+        const fp = flatpickr(checkInInput, {
             mode: "range",
             dateFormat: "Y-m-d",
             minDate: "today",
+            altInput: true,
+            altFormat: "F j, Y",
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length === 1) {
+                    // Only check-in date selected
+                    checkInInput.value = flatpickr.formatDate(selectedDates[0], "Y-m-d");
+                    checkOutInput.value = ""; // Clear check-out
+                    instance.altInput.value = flatpickr.formatDate(selectedDates[0], "F j, Y");
+                } else if (selectedDates.length === 2) {
+                    // Both dates selected
+                    checkInInput.value = flatpickr.formatDate(selectedDates[0], "Y-m-d");
+                    checkOutInput.value = flatpickr.formatDate(selectedDates[1], "Y-m-d");
+                    instance.altInput.value = flatpickr.formatDate(selectedDates[0], "F j, Y");
+                    checkOutInput._flatpickr.setDate(selectedDates[1], true);
+                }
+            }
+        });
+
+        // Separate Flatpickr instance for checkOut to handle display
+        const fpOut = flatpickr(checkOutInput, {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            altInput: true,
+            altFormat: "F j, Y",
+            // Prevent independent selection in checkOut
+            onOpen: function() {
+                fp.open(); // Redirect to main range picker
+                fpOut.close();
+            }
+        });
+
+        // Open main calendar when clicking either input
+        checkOutInput.addEventListener("focus", function() {
+            fp.open();
         });
 
         function checkAvailability() {
-            const dateInput = document.getElementById("datePicker").value;
-            if (!dateInput.includes(" to ")) {
-                document.getElementById("responseText").innerText = "Please select both start and end dates.";
+            const startDate = checkInInput.value;
+            const endDate = checkOutInput.value;
+
+            if (!startDate || !endDate) {
+                document.getElementById("responseText").innerText = "Please select both check-in and check-out dates.";
                 return;
             }
-            
-            const dates = dateInput.split(" to ");
-            const startDate = dates[0];
-            const endDate = dates[1];
             
             fetch("https://farrant-drive-a1f02247ac83.herokuapp.com/api/check-availability", {
                 method: "POST",
