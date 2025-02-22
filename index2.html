@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lake Wanaka Holiday Home Rental - perfect for families and outdoor adventures</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const header = document.querySelector('header');
+      const hamburger = document.querySelector('.hamburger');
+      const navMenu = document.querySelector('nav ul');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+
+      hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    });
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SDLJSJZ08C"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SDLJSJZ08C');
+  </script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+  <style>
+    /* New Overview section and side-by-side layout */
+    .overview-booking-section {
+      padding: 40px 20px;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    .overview {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      color: #333;
+      text-align: left;
+      padding: 20px;
+    }
+    .overview h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .overview p {
+      margin: 0;
+    }
+    .booking-container {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .date-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .date-field {
+      flex: 1;
+      min-width: 0;
+    }
+    .booking-container input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+    .booking-container label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: left;
+      font-size: 14px;
+      color: #333;
+    }
+    .booking-container button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #008080;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 15px;
+      transition: background-color 0.3s;
+    }
+    .booking-container button:hover {
+      background-color: #006666;
+    }
+    .response {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+    .booking-container p.intro-text {
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    /* New Photos Section */
+    .photos-section {
+      padding: 40px 20px;
+      background-color: #fff;
+      text-align: center;
+    }
+    .photos-section h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .photos-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      color: #333;
+    }
+    .photos-container p {
+      margin: 0;
+    }
+
+    /* Customer Reviews Section */
+    .reviews-section {
+      padding: 40px 20px;
+      background-color: #fff;
+      text-align: center;
+    }
+    .reviews-section h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .reviews-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .review {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+      background: #f4f4f4;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: left;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .review p {
+      color: #333;
+      margin: 10px 0;
+    }
+    .review .source {
+      font-style: italic;
+      color: #666;
+    }
+
+    /* Media Queries */
+    @media (max-width: 400px) {
+      .date-field {
+        flex: 100%;
+      }
+    }
+    @media (max-width: 768px) {
+      .overview-booking-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      .overview, .booking-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+      }
+      .overview {
+        text-align: left;
+      }
+    }
+
+    /* Navigation styles */
+    nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+    .btn-nav {
+      margin-left: 15px;
+      white-space: nowrap;
+    }
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        padding: 10px 0;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      nav ul li {
+        margin: 10px 0;
+        text-align: center;
+      }
+      .btn-nav {
+        margin: 10px auto;
+        display: block;
+        width: 50%;
+        text-align: center;
+      }
+    }
+    header {
+      box-sizing: border-box;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Lake Wānaka Retreat</div>
+    <nav>
+      <ul>
+        <li><a href="#about-wanaka">About Wānaka</a></li>
+        <li><a href="#activities">Activities</a></li>
+        <li><a href="#about-house">About our House</a></li>
+        <li><a href="#rates">Rates</a></li>
+      </ul>
+      <a href="https://www.airbnb.com.au/rooms/1094384210822136949?source_impression_id=p3_1736206959_P3nNiDluCvbHGGUF" class="btn-nav">Book Now</a>
+      <button class="hamburger">☰</button>
+    </nav>
+  </header>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Experience Lake Wānaka like a local</h1>
+      <p>Stay in a fully equipped, family friendly house</p>
+      <a href="https://www.airbnb.com.au/rooms/1094384210822136949?source_impression_id=p3_1736206959_P3nNiDluCvbHGGUF" class="btn">Book Now</a>
+    </div>
+  </section>
+  <section class="overview-booking-section">
+    <div class="overview">
+      <h2>About Our House</h2>
+      <p>This will be a brief overview of our house.</p>
+    </div>
+    <div class="booking-container">
+      <h2>Check Availability</h2>
+      <p class="intro-text">Use the form below to check availability and prices.</p>
+      <div class="date-container">
+        <div class="date-field">
+          <label for="checkIn">Check In</label>
+          <input type="text" id="checkIn" placeholder="Select check-in date">
+        </div>
+        <div class="date-field">
+          <label for="checkOut">Check Out</label>
+          <input type="text" id="checkOut" placeholder="Select check-out date">
+        </div>
+      </div>
+      <button onclick="checkAvailability()">Check Availability</button>
+      <p class="response" id="responseText"></p>
+    </div>
+  </section>
+  <section class="photos-section">
+    <h2>House Photos</h2>
+    <div class="photos-container">
+      <p>Placeholder for house photos - images coming soon.</p>
+    </div>
+  </section>
+  <section class="reviews-section">
+    <h2>Customer Reviews</h2>
+    <div class="reviews-container">
+      <div class="review">
+        <p>"Absolutely loved our stay! The house was perfect for our family."</p>
+        <p>Stayed: January 2025</p>
+        <p class="source">Source: Airbnb</p>
+      </div>
+      <div class="review">
+        <p>"Great location and comfortable home. Highly recommend!"</p>
+        <p>Stayed: December 2024</p>
+        <p class="source">Source: Booking.com</p>
+      </div>
+      <div class="review">
+        <p>"A wonderful retreat with stunning views. Will return!"</p>
+        <p>Stayed: November 2024</p>
+        <p class="source">Source: Airbnb</p>
+      </div>
+      <div class="review">
+        <p>"Clean, spacious, and well-equipped. Perfect holiday spot."</p>
+        <p>Stayed: October 2024</p>
+        <p class="source">Source: Booking.com</p>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <p>Contact us via Airbnb for now</p>
+  </footer>
+
+  <script>
+    const checkInInput = document.getElementById("checkIn");
+    const checkOutInput = document.getElementById("checkOut");
+
+    const fp = flatpickr(checkInInput, {
+      mode: "range",
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      altInput: true,
+      altFormat: "F j, Y",
+      onChange: function(selectedDates, dateStr, instance) {
+        if (selectedDates.length === 1) {
+          checkInInput.value = flatpickr.formatDate(selectedDates[0], "Y-m-d");
+          checkOutInput.value = "";
+          instance.altInput.value = flatpickr.formatDate(selectedDates[0], "F j, Y");
+        } else if (selectedDates.length === 2) {
+          checkInInput.value = flatpickr.formatDate(selectedDates[0], "Y-m-d");
+          checkOutInput.value = flatpickr.formatDate(selectedDates[1], "Y-m-d");
+          instance.altInput.value = flatpickr.formatDate(selectedDates[0], "F j, Y");
+          checkOutInput._flatpickr.setDate(selectedDates[1], true);
+        }
+      }
+    });
+
+    const fpOut = flatpickr(checkOutInput, {
+      dateFormat: "Y-m-d",
+      minDate: "today",
+      altInput: true,
+      altFormat: "F j, Y",
+      onOpen: function() {
+        fp.open();
+        fpOut.close();
+      }
+    });
+
+    checkOutInput.addEventListener("focus", function() {
+      fp.open();
+    });
+
+    function checkAvailability() {
+      const startDate = checkInInput.value;
+      const endDate = checkOutInput.value;
+
+      if (!startDate || !endDate) {
+        document.getElementById("responseText").innerText = "Please select both check-in and check-out dates.";
+        return;
+      }
+      
+      fetch("https://farrant-drive-a1f02247ac83.herokuapp.com/api/check-availability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ startDate, endDate })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.available) {
+          document.getElementById("responseText").innerText = `Available! Total Price: $${data.totalPrice}`;
+        } else {
+          document.getElementById("responseText").innerText = "Not available for the selected dates.";
+        }
+      })
+      .catch(error => {
+        document.getElementById("responseText").innerText = "Error checking availability. Please try again later.";
+      });
+    }
+  </script>
+</body>
+</html>
