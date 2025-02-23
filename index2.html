@@ -12,6 +12,7 @@
       const header = document.querySelector('header');
       const hamburger = document.querySelector('.hamburger');
       const navMenu = document.querySelector('nav ul');
+      const checkButton = document.querySelector('.booking-container button');
 
       window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -23,6 +24,11 @@
 
       hamburger.addEventListener('click', () => {
         navMenu.classList.toggle('active');
+      });
+
+      checkButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        checkAvailability();
       });
     });
   </script>
@@ -289,10 +295,10 @@
         </div>
         <div class="date-field">
           <label for="checkOut">Check Out</label>
-          <input type="text" id="checkOut" placeholder="Select check-out date">
+          <input type="text" id="checkOut" placeholder="Select check-out date" readonly>
         </div>
       </div>
-      <button onclick="checkAvailability()">Check Availability</button>
+      <button>Check Availability</button>
       <p class="response" id="responseText"></p>
     </div>
   </section>
@@ -350,23 +356,22 @@
           checkInInput.value = flatpickr.formatDate(selectedDates[0], "Y-m-d");
           checkOutInput.value = flatpickr.formatDate(selectedDates[1], "Y-m-d");
           instance.altInput.value = flatpickr.formatDate(selectedDates[0], "F j, Y");
-          checkOutInput._flatpickr.setDate(selectedDates[1], true);
+          checkOutInput.value = flatpickr.formatDate(selectedDates[1], "F j, Y"); // Set check-out display directly
         }
       }
     });
 
-    const fpOut = flatpickr(checkOutInput, {
-      dateFormat: "Y-m-d",
-      minDate: "today",
-      altInput: true,
-      altFormat: "F j, Y",
-      onOpen: function() {
-        fp.open();
-        fpOut.close();
-      }
+    // Prevent native picker on checkOut by making it readonly and redirecting focus
+    checkOutInput.addEventListener("focus", function(e) {
+      e.preventDefault();
+      fp.open();
     });
-
-    checkOutInput.addEventListener("focus", function() {
+    checkOutInput.addEventListener("click", function(e) {
+      e.preventDefault();
+      fp.open();
+    });
+    checkOutInput.addEventListener("touchstart", function(e) {
+      e.preventDefault();
       fp.open();
     });
 
@@ -382,11 +387,15 @@
       fetch("https://farrant-drive-a1f02247ac83.herokuapp.com/api/check-availability", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Accept": "application/json"
         },
         body: JSON.stringify({ startDate, endDate })
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.json();
+      })
       .then(data => {
         if (data.available) {
           document.getElementById("responseText").innerText = `Available! Total Price: $${data.totalPrice}`;
@@ -395,6 +404,7 @@
         }
       })
       .catch(error => {
+        console.error("Fetch error:", error);
         document.getElementById("responseText").innerText = "Error checking availability. Please try again later.";
       });
     }
